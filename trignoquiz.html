@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 10 Trigonometry Quiz</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentQuestion = 0;
+            let score = 0;
+            let timer;
+            const questions = [
+                {question: "If sin θ = 3/5, what is cos θ?", options: ["4/5", "3/5", "5/3", "4/3"], answer: 0, difficulty: "medium"},
+                {question: "If tan θ = 1, what is the value of sin θ?", options: ["1/√2", "√3/2", "1", "1/2"], answer: 0, difficulty: "medium"},
+                {question: "What is the value of sin 45°?", options: ["1/2", "√3/2", "1", "1/√2"], answer: 3, difficulty: "medium"},
+                {question: "If cos A = 4/5, what is sin A?", options: ["3/5", "4/5", "1/5", "√3/5"], answer: 0, difficulty: "medium"},
+                {question: "If sin θ = 1/2, what is the value of cos θ?", options: ["1/2", "√3/2", "0", "√2/2"], answer: 1, difficulty: "medium"},
+                {question: "If tan θ = √3, what is sin θ?", options: ["√3/2", "1/2", "1/√2", "1"], answer: 3, difficulty: "difficult"},
+                {question: "If cos θ = 1/2, what is sin θ?", options: ["1/2", "√3/2", "0", "1"], answer: 1, difficulty: "difficult"},
+                {question: "If tan θ = 1, what is the value of cos θ?", options: ["1/√2", "1", "0", "√3/2"], answer: 0, difficulty: "difficult"},
+                {question: "If sin θ = 0.8, what is cos θ?", options: ["0.6", "0.8", "0.4", "1"], answer: 0, difficulty: "difficult"},
+                {question: "If sin 30° = 1/2, what is cos 60°?", options: ["1/2", "1", "0", "1/√2"], answer: 0, difficulty: "medium"},
+                {question: "If cos 30° = √3/2, what is sin 60°?", options: ["√3/2", "1/2", "1", "0"], answer: 0, difficulty: "medium"},
+                {question: "If sin 90° = 1, what is cos 0°?", options: ["1", "0", "-1", "1/2"], answer: 0, difficulty: "medium"},
+                {question: "If cos θ = 1/√2, what is sin θ?", options: ["1/√2", "1", "0", "1/2"], answer: 0, difficulty: "difficult"},
+                {question: "If tan θ = 1/√3, what is sin θ?", options: ["1/2", "√3/2", "0", "1/√2"], answer: 0, difficulty: "difficult"},
+                {question: "If sin θ = √3/2, what is cos θ?", options: ["1/2", "√3/2", "0", "1"], answer: 1, difficulty: "difficult"},
+                {question: "If cos θ = 1/3, what is sin θ?", options: ["2√2/3", "√8/3", "1/√3", "1/2"], answer: 0, difficulty: "difficult"},
+                {question: "If sin θ = 5/13, what is cos θ?", options: ["12/13", "5/13", "13/5", "1/2"], answer: 0, difficulty: "difficult"},
+                {question: "If tan θ = 4/3, what is sin θ?", options: ["4/5", "3/5", "5/4", "1/2"], answer: 0, difficulty: "difficult"},
+                {question: "If cos θ = 12/13, what is sin θ?", options: ["5/13", "12/13", "13/12", "1/2"], answer: 0, difficulty: "difficult"},
+                {question: "If tan θ = 5/12, what is sin θ?", options: ["5/13", "12/13", "13/5", "1/2"], answer: 0, difficulty: "difficult"}
+            ];
+            function loadQuestion() {
+                const questionData = questions[currentQuestion];
+                document.getElementById('question').innerText = questionData.question;
+                document.getElementById('options').innerHTML = questionData.options.map((opt, i) => `<button onclick='checkAnswer(${i})' class='px-4 py-2 bg-blue-500 text-white rounded-xl my-2 w-full'>${opt}</button>`).join('');
+                startTimer(questionData.difficulty);
+            }
+            window.checkAnswer = function(selected) {
+                if (selected === questions[currentQuestion].answer) score++;
+                currentQuestion++;
+                clearInterval(timer);
+                if (currentQuestion < questions.length) loadQuestion();
+                else showScore();
+            }
+            function startTimer(difficulty) {
+                let time = difficulty === "medium" ? 30 : 120;
+                timer = setInterval(() => {
+                    time--;
+                    document.getElementById('timer').innerText = `Time Left: ${time}s`;
+                    if (time <= 0) {
+                        clearInterval(timer);
+                        currentQuestion++;
+                        if (currentQuestion < questions.length) loadQuestion();
+                        else showScore();
+                    }
+                }, 1000);
+            }
+            function showScore() {
+                document.getElementById('quiz-container').innerHTML = `<h2 class='text-2xl font-bold mb-4'>Quiz Complete!</h2><p class='text-lg'>Your Score: ${score} / ${questions.length}</p>`;
+            }
+            loadQuestion();
+        });
+    </script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div id="quiz-container" class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+        <h2 id="question" class="text-xl font-bold mb-4"></h2>
+        <div id="options" class="mb-4"></div>
+        <p id="timer" class="text-right font-semibold"></p>
+    </div>
+</body>
+</html>

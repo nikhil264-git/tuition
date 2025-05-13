@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Light Quiz</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  .question { font-size: 20px; margin-bottom: 10px; }
+  .options { list-style-type: none; padding: 0; }
+  .options li { margin-bottom: 8px; }
+  button { padding: 10px 20px; font-size: 16px; }
+  #timer { font-weight: bold; margin-bottom: 20px; }
+  #score { font-size: 22px; font-weight: bold; margin-top: 20px; }
+</style>
+</head>
+<body>
+<h1>Light, Reflection & Refraction Quiz</h1>
+<div id="timer">Time left: <span id="time">0</span> seconds</div>
+<div id="quiz-container">
+  <div id="question" class="question"></div>
+  <ul id="options" class="options"></ul>
+  <button id="next-btn" onclick="nextQuestion()">Next</button>
+</div>
+<div id="score" style="display:none;"></div>
+
+<script>
+const questions = [
+  // Numerical Questions (10)
+  {
+    question: "A convex lens forms an image 30 cm from the lens when the object is 20 cm away. What is the focal length?",
+    options: ["12 cm", "60 cm", "15 cm", "10 cm"],
+    answer: "12 cm",
+    difficulty: "difficult"
+  },
+  {
+    question: "The refractive index of a medium is 1.5. What is the speed of light in it? (c = 3x10⁸ m/s)",
+    options: ["2x10⁸ m/s", "1.5x10⁸ m/s", "3x10⁸ m/s", "4.5x10⁸ m/s"],
+    answer: "2x10⁸ m/s",
+    difficulty: "medium"
+  },
+  {
+    question: "The refractive index of a water is 1.33. If the speed of the light in air is (c = 3x10⁸ m/s). What is its speed in water ?",
+    options: ["2.25x10⁸ m/s", "1.33x10⁸ m/s", "4x10⁸ m/s", "4.5x10⁸ m/s"],
+    answer: "2.25x10⁸ m/s",
+    difficulty: "medium"
+  },
+  
+  // Theory Questions (15)
+  {
+    question: "What is the law of reflection?",
+    options: [
+      "Angle of incidence = Angle of reflection",
+      "Light bends towards normal",
+      "Light bends away from normal",
+      "None"
+    ],
+    answer: "Angle of incidence = Angle of reflection",
+    difficulty: "medium"
+  },
+  {
+    question: "Which mirror is used in rear view mirror in vehicles?",
+    options: [
+      "Concave",
+      "Convex",
+      "Plane",
+      "None"
+    ],
+    answer: "Convex",
+    difficulty: "medium"
+  },
+  {
+    question: "If an object is placed at the center of curvature of a concave mirror, where is the image formed?",
+    options: [
+      "At Focus",
+      "At infinity",
+      "At Center of curvature",
+      "Pole"
+    ],
+    answer: "At Center of curvature",
+    difficulty: "medium"
+  },
+  {
+    question: "The focal length of a convex lens is 20 cm. What is its power?",
+    options: [
+        "+5",
+        "+2",
+        "-5",
+        "-2"
+    ],
+    answer: "+5",
+    difficulty: "medium"
+  },
+  {
+    question: "Which of the following is true for a virtual image?",
+    options: [
+        "can be obtained on a screen",
+        "cannot be obtained on a screen",
+        "Always inverted",
+        "Always smaller than the object"
+    ],
+    answer: "cannot be obtained on a screen",
+    difficulty: "medium"
+  },
+  {
+    question: "In refraction through a convex lens, the image is real, inverted and magnified when the object is?",
+    options: [
+        "At 2F",
+        "Between F and  2F",
+        "Beyond 2F",
+        "At F"
+    ],
+    answer: "Between F and 2F",
+    difficulty: "medium"
+  },
+  {
+    question: "A lens forms an image that is erect, virtual and magnified. The lens must be:",
+    options: [
+        "Concave",
+        "Convex",
+        "Cylinder",
+        "Plano-Cpnvex"
+    ],
+    answer: "Convex",
+    difficulty: "medium"
+
+  },
+  {
+    question: "A ray of light passes from water (μ = 1.33) to glass (μ = 1.5). The ray will:",
+    options: [
+        "Bend toward the normal",
+        "Go undeviated",
+        "Bend away from the normal",
+        "Get reflected"
+    ],
+    answer: "Bend toward the normal",
+    difficulty: "difficult"
+  },
+  {
+    question: "When light travels from a rarer to denser medium, it:",
+    options: [
+        "Speeds up",
+        "Slows down",
+        "Does not change speed",
+        "Bends away from the normal"
+    ],
+    answer: "Slows down",
+    difficulty: "medium"
+  },
+  {
+    questions: "Refraction occurs due to change in:",
+    options: [
+        "Medium",
+        "Temperature",
+        "Wavelength",
+        "Both A and C"
+    ],
+    answer: "Medium",
+    difficulty: "medium"
+  },
+  {
+    question: "The power of a lens is +2 D. The lens is:",
+    options: [
+        "Concave",
+        "Convex",
+        "Plano-convex",
+        "Cylinder"
+    ],
+    answer: "Convex",
+    difficulty: "medium"
+  },
+  {
+    question: "The mirror used in a solar cooker is:",
+    options: [
+        "Plane mirror",
+        "Concave mirror",
+        "Convex mirror",
+        "Both A and B"
+    ],
+    answer: "Concave mirror",
+    difficulty: "medium"
+  },
+  {
+    question: "The radius of curvature of a spherical mirror is 20 cm. Its focal length is:",
+    options: [
+        "10 cm",
+        "5cm",
+        "20 cm",
+        "40 cm"
+    ],
+    answer: "10 cm",
+    difficulty: "difficult"
+  },
+  {
+    question: "The mirror formula is:",
+    options: [
+        "1/f = 1/v - 1/u",
+        "1/v = 1/f + 1/u",
+        "1/f = 1/u + 1/v",
+        "Both B and C"
+    ],
+    answer: "Both B and C",
+    difficulty: "medium"
+  },
+  {
+    question: "The image formed by a convex mirror is always:",
+    options: [
+        "Real and inverted",
+        "Virtual and erect",
+        "Real and erect",
+        "Inverted and virtual:
+
+    ],
+    answer: "Virtual and erect",
+    difficulty: "medium"
+  }
+
+];
+
+
+
+let currentQuestionIndex = 0;
+let score = 0;
+let timer;
+
+function startTimer(duration) {
+  let time = duration;
+  document.getElementById('time').textContent = time;
+  timer = setInterval(() => {
+    time--;
+    document.getElementById('time').textContent = time;
+    if (time <= 0) nextQuestion();
+  }, 1000);
+}
+
+function showQuestion() {
+  clearInterval(timer);
+  const q = questions[currentQuestionIndex];
+  document.getElementById('question').textContent = q.question;
+  const optionsList = document.getElementById('options');
+  optionsList.innerHTML = '';
+  
+  q.options.forEach((option, index) => {
+    const li = document.createElement('li');
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'option';
+    radio.id = 'option' + index;
+    radio.value = option;
+    
+    const label = document.createElement('label');
+    label.htmlFor = 'option' + index;
+    label.textContent = option;
+    
+    li.appendChild(radio);
+    li.appendChild(label);
+    optionsList.appendChild(li);
+  });
+
+  startTimer(q.difficulty === 'difficult' ? 120 : 30);
+}
+
+function nextQuestion() {
+  clearInterval(timer);
+  const selected = document.querySelector('input[name="option"]:checked');
+  if (selected && selected.value === questions[currentQuestionIndex].answer) {
+    score++;
+  }
+  
+  if (++currentQuestionIndex < questions.length) {
+    showQuestion();
+  } else {
+    document.getElementById('quiz-container').style.display = 'none';
+    document.getElementById('score').textContent = 
+      `Your score: ${score}/${questions.length}`;
+    document.getElementById('score').style.display = 'block';
+  }
+}
+
+// Start quiz
+showQuestion();
+</script>
+</body>
+</html>
